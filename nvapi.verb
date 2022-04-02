@@ -1,0 +1,39 @@
+w_metadata nvapi dlls \
+    title="NVAPI" \
+    publisher="Cavern" \
+    year="2022" \
+    media="download" \
+    author_name="jp7677" \
+    app_name="dxvk-nvapi"
+
+load_nvapi()
+{
+    _W_nvapi_version="$(w_get_github_latest_release ${author_name} ${app_name})"
+    _W_nvapi_version="${_W_nvapi_version#v}"
+    _W_package_archive="${app_name}-v${_W_nvapi_version}.tar.gz"
+    _W_dll_overrides="nvapi64 nvapi"
+
+    w_linkcheck_ignore=1 w_download "https://github.com/${author_name}/${app_name}/releases/download/v${_W_nvapi_version}/${_W_package_archive}"
+
+    w_try_cd "${W_TMP}"
+    w_try tar -zxf "${W_CACHE}/${W_PACKAGE}/${_W_package_archive}"
+
+    w_try mv "${W_TMP}/x32/nvapi.dll" "${W_SYSTEM32_DLLS}/"
+
+    if test "${W_ARCH}" = "win64"; then
+        w_try mv "${W_TMP}/x64/nvapi64.dll" "${W_SYSTEM64_DLLS}/"
+        w_try cp "/usr/lib/nvidia/wine/nvngx.dll" "${W_SYSTEM64_DLLS}/"
+        w_try cp "/usr/lib/nvidia/wine/_nvngx.dll" "${W_SYSTEM64_DLLS}/"
+    fi
+
+    w_override_dlls native ${_W_dll_overrides}
+    w_override_dlls builtin,native nvcuda
+
+    # we must enable the nvcuda dll to be able to activate DLSS in games
+    pid=$(pidof wineserver)
+    [[ ! -z "$pid" ]] && tail --pid=$pid -f /dev/null # waits for wine process to end, either we will not be able to modify the reg file
+    w_try sed -i 's/"nvcuda"="disabled"/"nvcuda"="builtin,native"/g' "$WINEPREFIX/user.reg"
+
+    unset _W_nvapi_version
+    unset _W_package_archive
+}

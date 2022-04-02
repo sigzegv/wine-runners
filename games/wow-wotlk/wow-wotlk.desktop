@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=World Of Warcraft - WOTLK
+Terminal=false
+Exec=sh -c "$HOME/games/wow-wotlk/Wow.sh"
+Icon=wow-wotlk
+Categories=Games;

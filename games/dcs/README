@@ -1,0 +1,16 @@
+Wine runner for DCS.
+
+## TrackIR
+
+This runner handles trackIR with linuxtrack if installed in your wineprefix.
+To install trackIR soft in wineprefix, go in the path you installed linuxtrack (tested on linuxtrack 0.99.18),
+then enter path `share/linuxtrack`, there should be a file named `linuxtrack-wine.exe`.
+
+Source dcs.sh (run `source dcs.sh`) to your terminal to have env DCS env, then run `wine linuxtrack-wine.exe`.
+After completion, dcs will automatically start you TrackIR.
+
+## Tacview
+todo
+
+## SRS
+todo
