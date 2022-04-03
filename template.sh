@@ -31,6 +31,7 @@ USER=wineuser
 [ -z "$WINEPREFIX" ] && echo "Missing wine prefix envvar WINEPREFIX" && exit 1
 [ -z "$WINEPATH" ] && echo "Missing wine runner envvar WINEPATH" && exit 1
 [ ! -d "$WINEPATH" ] && echo "Missing wine runner at $WINEPATH" && exit 1
+which winetricks > /dev/null || (echo "Missing winetricks in PATH"; exit 1)
 
 [ -d "$WINEPREFIX" ] || wineboot -u
 [ -s "$WINEPREFIX/dosdevices/x:" ] || ln -sf "$SELF_PATH" "$WINEPREFIX/dosdevices/x:"
