@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function print_help() {
+    echo "Usage: wine-drive CMD DRIVE_LETTER [PATH]"
+    echo ""
+    echo "Available commands :"
+    echo " -l: list drives in prefix"
+    echo " -a: add a drive in prefix's dosdevices, with given drive letter and linked path"
+    echo " -r: removes given drive from dosdevices"
+    echo " -h: this help."
+    exit 0
+}
+
+if [[ $1 == "-h" ]]; then
+    print_help
+    exit 0
+fi
+
+[[ -z "$WINEPREFIX" ]] && echo "Please provide WINEPREFIX." && print_help && exit 0
+
+if [[ $1 == "-l" ]]; then
+    echo "Listing drives in $WINEPREFIX :"
+    \ls -lah "$WINEPREFIX/dosdevices"
+    exit 0
+fi
+
+[[ -z "$2" ]] && echo "Missing drive letter." && exit 1
+
+if [[ $1 == "-a" ]]; then
+    dir=$3
+    [[ -z "$dir" ]] && echo "Missing destination path. Using $(pwd)" && dir="$(pwd)"
+
+    [[ -L "$WINEPREFIX/dosdevices/$2*" ]] && echo "Drive $2 already exists in $WINEPREFIX..." && exit 1
+    [[ ! -d "$3" ]] && echo "Destination path $dir doesn't exists." && exit 1
+    cd "$WINEPREFIX/dosdevices"
+    ln -sf "$dir" "$2"
+    exit 0
+fi
+
+if [[ $1 == "-r" ]]; then
+    [[ ! -L "$WINEPREFIX/dosdevices/$2" ]] && echo "Drive $2 doesn't exists" && exit 1
+    rm -rf $WINEPREFIX/dosdevices/$2
+    exit 0
+fi
+
+echo "Unknown command $1"
+echo ""
+print_help
