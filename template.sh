@@ -10,6 +10,7 @@ WINEDEBUG=-all
 VKD3D_DEBUG=none
 DXVK_LOG_LEVEL=none
 
+WINE_LARGE_ADDRESS_AWARE=1
 #NVAPI_VERB=$SELF_PATH/.wine/nvapi.verb
 WINEDLLOVERRIDES="winemenubuilder.exe=d"
 WINEESYNC=1
@@ -22,6 +23,10 @@ DXVK_STATE_CACHE_PATH=$WINEPREFIX/.shadercache
 __GL_SHADER_DISK_CACHE=1
 __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 __GL_SHADER_DISK_CACHE_PATH=$DXVK_STATE_CACHE_PATH
+
+#WINEDLLPATH="$WINEPATH/lib64/wine:$WINEPATH/lib/wine"
+#LD_LIBRARY_PATH="$WINEPATH/lib:$WINEPATH/lib64:$LD_LIBRARY_PATH"
+#GST_PLUGIN_SYSTEM_PATH_1_0="$WINEPATH/lib64/gstreamer-1.0/:$WINEPATH/lib/gstreamer-1.0/" #hack on MF media display issues
 
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && return # exit if sourced
 # allows to source this env on your term without executing any app
