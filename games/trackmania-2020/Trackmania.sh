@@ -1,11 +1,9 @@
 #!/bin/bash
-
-# gog galaxy setup for multiplayer
-# https://content-system.gog.com/open_link/download?path=/open/galaxy/client/2.0.46.133/setup_galaxy_2.0.46.133.exe
+# first source this script then install : https://ubistatic3-a.akamaihd.net/orbit/launcher_installer/UbisoftConnectInstaller.exe
 
 set -a
 SELF_PATH=$(dirname $(realpath ${0}))
-WINEPREFIX="$HOME/.local/.wineprefixes/deathwing"
+WINEPREFIX="$HOME/.local/.wineprefixes/trackmania"
 WINEPATH="$HOME/.local/share/wine-ge"
 PATH="$WINEPATH/bin:$PATH"
 
@@ -14,8 +12,11 @@ VKD3D_DEBUG=none
 DXVK_LOG_LEVEL=none
 
 WINE_LARGE_ADDRESS_AWARE=1
+#NVAPI_VERB=$SELF_PATH/.wine/nvapi.verb
 WINEDLLOVERRIDES="winemenubuilder.exe=d"
 WINEESYNC=1
+#DXVK_ENABLE_NVAPI=1
+#VKD3D_CONFIG=dxr
 
 #DXVK_ASYNC=1
 DXVK_STATE_CACHE=1
@@ -47,5 +48,8 @@ deps=$(winetricks list-installed)
 echo $deps | grep sandbox > /dev/null || winetricks -q sandbox
 echo $deps | grep nocrashdialog > /dev/null || winetricks -q nocrashdialog
 echo $deps | grep dxvk > /dev/null || winetricks -q dxvk
+echo $deps | grep arial > /dev/null || winetricks -q arial
+#echo $deps | grep vkd3d > /dev/null || winetricks -q vkd3d
+#echo $deps | grep nvapi > /dev/null || winetricks -q "$NVAPI_VERB"
 
-wine SpaceHulkGame.exe
+wine Trackmania.exe
